@@ -1,0 +1,468 @@
+/* Main container styles */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.main-content {
+  width: 100%;
+  margin-top: 60px;
+  transition: margin-left 0.3s ease;
+}
+
+/* Notification styles */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 300px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 500;
+  animation: slideInRight 0.3s ease;
+}
+
+.notification-success {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.notification-error {
+  background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+}
+
+.notification-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+  padding: 0;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.notification-close-btn:hover {
+  opacity: 1;
+}
+
+/* Header styles */
+.header-gradient {
+  background: linear-gradient(135deg, #97c33c 0%, #7ba428 100%);
+  box-shadow: 0 4px 12px rgba(151, 195, 60, 0.3);
+}
+
+/* Logo styles */
+.logo {
+  width: 80px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Completion indicator */
+.completion-indicator {
+  text-align: center;
+}
+
+.progress-custom {
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.progress-custom .progress-bar {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
+}
+
+/* Registration card */
+.registration-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Form controls */
+.form-control-custom,
+.form-select {
+  border-radius: 8px;
+  border: 1.5px solid #ced4da;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+.form-control-custom:focus,
+.form-select:focus {
+  border-color: #97c33c;
+  box-shadow: 0 0 0 0.2rem rgba(151, 195, 60, 0.15);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+/* Form steps */
+.form-step {
+  min-height: 400px;
+  animation: fadeInUp 0.3s ease;
+}
+
+.step-header {
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+
+/* Step navigation */
+.step-navigation {
+  background-color: #f8f9fa;
+  margin: 0 -1.5rem -1.5rem -1.5rem;
+  padding: 1.5rem;
+  border-radius: 0 0 12px 12px;
+}
+
+.step-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.step-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* Step indicators */
+.step-indicators {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.step-indicator {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  color: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.step-indicator.active {
+  background-color: #007bff;
+  color: white;
+  transform: scale(1.1);
+}
+
+.step-indicator.completed {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Maintenance switch */
+.maintenance-switch {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.maintenance-switch .form-check-input {
+  width: 3rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+}
+
+.maintenance-switch .form-check-input:checked {
+  background-color: #97c33c;
+  border-color: #97c33c;
+}
+
+/* Image preview */
+.image-preview-container {
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.preview-image {
+  max-height: 200px;
+  max-width: 100%;
+  border-radius: 8px;
+}
+
+.upload-placeholder {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* Badge styles */
+.badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card enhancements */
+.card {
+  border: none;
+  border-radius: 12px;
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+}
+
+/* Form validation */
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+}
+
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+  border-color: #28a745;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.15);
+}
+
+.invalid-feedback {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Animations */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+
+  .logo {
+    width: 60px;
+  }
+
+  .notification {
+    min-width: 250px;
+    font-size: 14px;
+    right: 10px;
+    left: 10px;
+  }
+
+  .header-gradient .d-flex {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 15px;
+  }
+
+  .completion-indicator {
+    align-self: stretch;
+  }
+
+  .step-indicators {
+    position: static;
+    transform: none;
+    justify-content: center;
+  }
+
+  .step-navigation {
+    margin: 0 -1rem -1rem -1rem;
+    padding: 1rem;
+  }
+
+  .step-navigation .d-flex {
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .form-step {
+    min-height: 300px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header-gradient h1 {
+    font-size: 1.5rem;
+  }
+
+  .header-gradient p {
+    font-size: 0.9rem;
+  }
+
+  .step-indicator {
+    width: 35px;
+    height: 35px;
+    font-size: 0.9rem;
+  }
+
+  .registration-card .card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Enhanced hover effects */
+.form-control-custom:hover,
+.form-select:hover {
+  border-color: #97c33c;
+}
+
+/* Button enhancements */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Form group spacing */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+/* Custom spacing utilities */
+.spacing-sm {
+  margin-bottom: 1rem;
+}
+
+.spacing-md {
+  margin-bottom: 1.5rem;
+}
+
+.spacing-lg {
+  margin-bottom: 2rem;
+}
+
+/* Enhanced card body padding */
+.card-body {
+  padding: 1.5rem;
+}
+
+/* File input enhancements */
+.form-control[type="file"] {
+  padding: 8px 12px;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+  background: linear-gradient(135deg, #97c33c 0%, #7ba428 100%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  margin-right: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button:hover {
+  background: linear-gradient(135deg, #7ba428 0%, #6a9220 100%);
+}
+
+/* Textarea enhancements */
+.form-control[rows] {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Switch enhancements */
+.form-check-input:checked {
+  background-color: #97c33c;
+  border-color: #97c33c;
+}
+
+.form-check-input:focus {
+  border-color: #97c33c;
+  box-shadow: 0 0 0 0.2rem rgba(151, 195, 60, 0.25);
+}
+
+/* Progress bar in header */
+.progress-custom .progress-bar {
+  transition: width 0.3s ease;
+}
+
+/* Enhanced form sections */
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+/* Icon enhancements */
+.bi {
+  font-size: 1rem;
+}
+
+.step-header .bi {
+  font-size: 1.2rem;
+}
+
+/* Form text enhancements */
+.form-text {
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* Enhanced borders */
+.border-top {
+  border-top: 2px solid #e9ecef !important;
+}
+
+.border-bottom {
+  border-bottom: 2px solid #e9ecef !important;
+}
