@@ -1,0 +1,10 @@
+instalar - dependencias
+
+npm install bootstrap
+npm install react-router-dom
+npm install lucide-react
+npm install react-big-calendar moment bootstrap react-bootstrap
+
+
+
+

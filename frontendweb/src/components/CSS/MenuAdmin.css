@@ -1,0 +1,413 @@
+/* Menu toggle button */
+.menu-toggle-btn {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 1030;
+  background-color: #97c33c;
+  border: none;
+  color: white;
+  padding: 12px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.menu-toggle-btn.menu-open {
+  left: 210px;
+}
+
+.menu-toggle-btn:hover {
+  background-color: #7ba428;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.menu-toggle-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(151, 195, 60, 0.3);
+}
+
+/* Sidebar menu */
+.sidebar-menu {
+  width: 200px;
+  background: linear-gradient(180deg, #97c33c 0%, #7ba428 100%);
+  padding-top: 2rem;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-menu.sidebar-open {
+  transform: translateX(0);
+}
+
+/* Menu list */
+.menu-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu-item {
+  margin: 0;
+}
+
+/* Menu links */
+.menu-link {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+}
+
+.menu-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  padding-left: 1.5rem;
+  border-left-color: white;
+}
+
+.menu-link:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.15);
+  color: white;
+}
+
+/* Menu icons */
+.menu-icon {
+  margin-right: 0.75rem;
+  font-size: 1.1rem;
+  color: white;
+  width: 20px;
+  text-align: center;
+}
+
+/* Menu text */
+.menu-text {
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+/* Logout container */
+.logout-container {
+  margin-top: auto;
+  margin-bottom: 20px;
+  padding: 0 0.5rem;
+}
+
+/* Logout button */
+.logout-btn {
+  width: 100%;
+  background-color: #dc3545;
+  border: none;
+  color: white;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  border-left: 3px solid transparent;
+}
+
+.logout-btn:hover {
+  background-color: #c82333;
+  border-left-color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.logout-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3);
+}
+
+/* Menu overlay */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 900;
+  backdrop-filter: blur(2px);
+}
+
+/* Logout modal */
+.logout-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1100;
+  backdrop-filter: blur(3px);
+}
+
+.logout-modal {
+  background-color: white;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.logout-modal-header {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: white;
+  padding: 1.5rem;
+  border-bottom: none;
+}
+
+.logout-modal-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.logout-modal-body {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.logout-modal-body p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #495057;
+  line-height: 1.5;
+}
+
+.logout-modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  background-color: #f8f9fa;
+}
+
+.logout-modal-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.logout-modal-btn-cancel {
+  background-color: #6c757d;
+  color: white;
+}
+
+.logout-modal-btn-cancel:hover {
+  background-color: #5a6268;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+.logout-modal-btn-confirm {
+  background-color: #dc3545;
+  color: white;
+}
+
+.logout-modal-btn-confirm:hover {
+  background-color: #c82333;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+}
+
+.logout-modal-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .menu-toggle-btn {
+    top: 8px;
+    left: 8px;
+    padding: 10px 12px;
+    font-size: 1.1rem;
+  }
+
+  .menu-toggle-btn.menu-open {
+    left: 210px;
+  }
+
+  .sidebar-menu {
+    width: 200px;
+  }
+
+  .menu-link {
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .menu-link:hover {
+    padding-left: 1.375rem;
+  }
+
+  .logout-btn {
+    padding: 0.875rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .logout-modal {
+    width: 350px;
+    margin: 1rem;
+  }
+
+  .logout-modal-header {
+    padding: 1.25rem;
+  }
+
+  .logout-modal-title {
+    font-size: 1.1rem;
+  }
+
+  .logout-modal-body {
+    padding: 1.25rem;
+  }
+
+  .logout-modal-footer {
+    padding: 1rem 1.25rem 1.25rem;
+    flex-direction: column;
+  }
+
+  .logout-modal-btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .logout-modal-btn:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar-menu {
+    width: 180px;
+  }
+
+  .menu-toggle-btn.menu-open {
+    left: 190px;
+  }
+
+  .menu-link {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .menu-link:hover {
+    padding-left: 1.25rem;
+  }
+
+  .menu-icon {
+    font-size: 1rem;
+    margin-right: 0.625rem;
+  }
+
+  .logout-btn {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .logout-modal {
+    width: 320px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle-btn,
+  .sidebar-menu,
+  .menu-link,
+  .logout-btn,
+  .logout-modal {
+    transition: none;
+  }
+
+  .logout-modal {
+    animation: none;
+  }
+}
+
+/* Focus styles for keyboard navigation */
+.menu-link:focus-visible,
+.logout-btn:focus-visible,
+.logout-modal-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .sidebar-menu {
+    border-right: 2px solid white;
+  }
+
+  .menu-link,
+  .logout-btn {
+    border: 1px solid transparent;
+  }
+
+  .menu-link:hover,
+  .logout-btn:hover {
+    border-color: white;
+  }
+}
+
+/* Print styles */
+@media print {
+  .menu-toggle-btn,
+  .sidebar-menu,
+  .menu-overlay,
+  .logout-modal-overlay {
+    display: none !important;
+  }
+}

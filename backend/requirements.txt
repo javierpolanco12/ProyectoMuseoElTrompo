@@ -1,0 +1,7 @@
+Django==5.2.1
+djangorestframework==3.15.1
+psycopg2-binary==2.9.9
+<<<<<<< HEAD
+=======
+django-cors-headers==4.3.1
+>>>>>>> 3bda08131 (Actualización del backend)

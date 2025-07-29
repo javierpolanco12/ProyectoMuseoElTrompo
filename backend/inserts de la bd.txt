@@ -1,0 +1,424 @@
+-----------------version actualizada de las tablas--------------
+
+CREATE TABLE sala(
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    ubicacion TEXT NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+CREATE TABLE tipo_interactivo (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+CREATE TABLE status_interactivo (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE interactivo (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    numero_serie VARCHAR(100) NOT NULL,
+    modelo_computadora VARCHAR(100),
+    marca_computadora VARCHAR(100),
+    fecha_instalado DATE NOT NULL,
+    sala_id INTEGER NOT NULL REFERENCES sala(id) ON DELETE CASCADE,
+    tipo_id INTEGER NOT NULL REFERENCES tipo_interactivo(id) ON DELETE CASCADE,
+    status_id INTEGER NOT NULL REFERENCES status_interactivo(id) ON DELETE CASCADE
+);
+
+CREATE TABLE tipo_mantenimiento (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+CREATE TABLE dep_area (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL
+);
+
+CREATE TABLE status_mantenimiento (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE nivel_prioridad (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE,
+    descripcion TEXT,
+    nivel SMALLINT NOT NULL UNIQUE
+);
+
+CREATE TABLE reporte_falla (
+    id SERIAL PRIMARY KEY,
+    interactivo_id INTEGER NOT NULL REFERENCES interactivo(id) ON DELETE CASCADE,
+    descripcion TEXT NOT NULL,
+    foto VARCHAR(255),
+    fecha_reporte DATE NOT NULL,
+    estado_id INTEGER NOT NULL REFERENCES status_mantenimiento(id) ON DELETE RESTRICT,
+    prioridad_id INTEGER REFERENCES nivel_prioridad(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE tarea_mantenimiento (
+    id SERIAL PRIMARY KEY,
+    interactivo_id INTEGER NOT NULL REFERENCES interactivo(id) ON DELETE CASCADE,
+    reporte_id INTEGER NOT NULL REFERENCES reporte_falla(id) ON DELETE CASCADE,
+    area_id INTEGER NOT NULL REFERENCES dep_area(id) ON DELETE CASCADE,
+    tipo_id INTEGER NOT NULL REFERENCES tipo_mantenimiento(id) ON DELETE CASCADE,
+    titulo VARCHAR(100) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha_programada DATE NOT NULL,
+    fecha_realizada DATE,
+    estado_id INTEGER NOT NULL REFERENCES status_mantenimiento(id) ON DELETE RESTRICT
+);
+
+
+CREATE TABLE reporte_mantenimiento (
+    id SERIAL PRIMARY KEY,
+    interactivo_id INTEGER NOT NULL REFERENCES interactivo(id) ON DELETE CASCADE,
+    tarea_id INTEGER NOT NULL REFERENCES tarea_mantenimiento(id) ON DELETE CASCADE,
+    observaciones TEXT NOT NULL,
+    fecha DATE NOT NULL,
+    estado_id INTEGER NOT NULL REFERENCES status_mantenimiento(id) ON DELETE RESTRICT
+);
+
+CREATE TABLE estado_tarea (
+    id SERIAL PRIMARY KEY,
+    tarea_id INTEGER NOT NULL REFERENCES tarea_mantenimiento(id) ON DELETE CASCADE,
+    estado_anterior VARCHAR(50) NOT NULL,
+    estado_nuevo VARCHAR(50) NOT NULL,
+    fecha_cambio DATE NOT NULL,
+    status_id INTEGER NOT NULL REFERENCES status_mantenimiento(id) ON DELETE RESTRICT DEFAULT 1
+);
+
+CREATE TABLE usuario (
+    id SERIAL PRIMARY KEY,
+    nombre_usuario VARCHAR(100) NOT NULL UNIQUE,
+    correo VARCHAR(150) NOT NULL,
+    contrasena_hash TEXT NOT NULL,
+    rol VARCHAR(50) NOT NULL,
+    fecha_creacion TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE perfil (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER NOT NULL UNIQUE REFERENCES usuario(id) ON DELETE CASCADE,
+    nombre_completo VARCHAR(150) NOT NULL,
+    telefono VARCHAR(20) NOT NULL,
+    foto_url TEXT,
+    direccion TEXT NOT NULL,
+    fecha_nacimiento DATE NOT NULL,
+    genero VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE proyector (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    numero_serie VARCHAR(100) NOT NULL UNIQUE,
+    modelo VARCHAR(100) NOT NULL,
+    marca VARCHAR(100) NOT NULL,
+    fecha_instalado DATE NOT NULL,
+    sala_id INTEGER NOT NULL REFERENCES sala(id) ON DELETE CASCADE,
+    status_id INTEGER NOT NULL REFERENCES status_interactivo(id) ON DELETE CASCADE
+);
+
+CREATE TABLE calendarizacion (
+    id SERIAL PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    fecha_inicio TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    fecha_fin TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    interactivo_id INTEGER REFERENCES interactivo(id) ON DELETE CASCADE,
+    tarea_id INTEGER REFERENCES tarea_mantenimiento(id) ON DELETE CASCADE,
+    creado_por_id INTEGER REFERENCES usuario(id) ON DELETE SET NULL,
+    creado_el TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+
+SELECT * FROM api_statusinteractivo;     
+
+---------------------------- version actualizada de los inserts ----------------------------------------------------
+
+INSERT INTO api_sala (nombre, ubicacion, descripcion) VALUES
+('Sala Integra', 'Planta Baja', 'Sala dedicada a aplicar la tecnología para mejorar la condición humana') ,
+('Sala Explica', '1er nivel', 'Espacio para familiarizarse con la ciencia a través de interacción activa') ,
+('Sala Experimenta', '1er nivel', 'Zona diseñada para que los pequeños realicen y descubran principios científicos') ,
+('Sala Genera', '2do nivel', 'Sala con exhibiciones centradas en creatividad, innovación y diseño') ,
+('Sala Educa', '2do nivel', 'Espacio lúdico que promueve el aprendizaje mediante actividades interactivas') ,
+('Sala Valora', '3er nivel', 'Área de reflexión cultural con debates y análisis, incluyendo un planetario digital móvil') ,
+('Sala de Usos Múltiples', 'Planta Baja', 'Espacio versátil para eventos, congresos y exposiciones') ,
+('Sala de Proyección', 'Planta baja', 'Sala especial para proyección de películas en 3D, capacidad para 220 personas') ;
+
+INSERT INTO api_tipointeractivo (nombre, descripcion) VALUES
+('Mecánico', 'Requiere manipulación física'),
+('Digital', 'Basado en pantallas o proyección');
+
+INSERT INTO api_statusinteractivo (nombre) VALUES
+('Activo'),
+('En Mantenimiento'),
+('Fuera de servicio'),
+('Baja');
+
+
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Anima jugando', 'INT-001', 'Vostro 3681', 'Dell', '2021-04-23', 1, 2, 1),
+('Arma el esqueleto', 'INT-002', 'ThinkCentre M920', 'Lenovo', '2019-08-30', 1, 2, 1),
+('Codifica objetos', 'INT-003', 'EliteDesk 800 G6', 'HP', '2017-02-07', 1, 2, 1),
+('Controla el movimiento', 'INT-004', 'OptiPlex 7080', 'Dell', '2015-05-16', 1, 2, 1),
+('Conviertete en cirujano', 'INT-005', 'ThinkCentre M75s', 'Lenovo', '2016-03-18', 1, 2, 1),
+('Descubre la informacion', 'INT-006', 'EliteDesk 705 G5', 'HP', '2018-07-21', 1, 2, 1),
+('Disfruta la aurora', 'INT-007', 'OptiPlex 5090', 'Dell', '2020-04-11', 1, 2, 1),
+('Diviertete con tu sombra', 'INT-008', 'Vostro 3681', 'Dell', '2021-12-02', 1, 2, 1),
+('Emprende el vuelo', 'INT-009', 'ThinkCentre M920', 'Lenovo', '2019-05-07', 1, 2, 1),
+('Enterate como se mueve', 'INT-010', 'EliteDesk 800 G6', 'HP', '2017-09-16', 1, 2, 1),
+('Gira la energia', 'INT-011', 'OptiPlex 7080', 'Dell', '2015-08-23', 1, 2, 1),
+('Haz musica', 'INT-012', 'ThinkCentre M720', 'Lenovo', '2023-01-14', 1, 2, 1),
+('Imita la naturaleza', 'INT-013', 'EliteDesk 705 G5', 'HP', '2022-10-05', 1, 2, 1),
+('Innova con la naturaleza', 'INT-014', 'OptiPlex 5090', 'Dell', '2024-06-29', 1, 2, 1),
+('Investiga los satelites', 'INT-015', 'Vostro 3681', 'Dell', '2019-11-19', 1, 2, 1),
+('Juega con tu cerebro', 'INT-016', 'ThinkCentre M920', 'Lenovo', '2018-02-26', 1, 2, 1),
+('Maximiza tu fuerza', 'INT-017', 'EliteDesk 800 G6', 'HP', '2020-07-30', 1, 2, 1),
+('Mecaniza tu diversion', 'INT-018', 'OptiPlex 7080', 'Dell', '2017-03-13', 1, 2, 1),
+('Monitorea tu arcoiris', 'INT-019', 'ThinkCentre M75s', 'Lenovo', '2016-09-09', 1, 2, 1),
+('Mueve las alas', 'INT-020', 'EliteDesk 705 G5', 'HP', '2021-05-25', 1, 2, 1),
+('Mueve las brujulas', 'INT-021', 'OptiPlex 5090', 'Dell', '2022-11-18', 1, 2, 1),
+('Pisa tu melodia', 'INT-022', 'Vostro 3681', 'Dell', '2015-01-04', 1, 2, 1),
+('Prendete con el rock', 'INT-023', 'ThinkCentre M920', 'Lenovo', '2023-04-21', 1, 2, 1),
+('Reusa con arte', 'INT-024', 'EliteDesk 800 G6', 'HP', '2018-08-30', 1, 2, 1),
+('Robotiza tu fuerza', 'INT-025', 'OptiPlex 7080', 'Dell', '2017-12-11', 1, 2, 1),
+('Robotiza tufuerza II', 'INT-026', 'ThinkCentre M720', 'Lenovo', '2021-07-06', 1, 2, 1);
+
+
+
+-- Sala 2 - EXPERIMENTA y GENERAL
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Aprende con Bernoulli', 'EXP-001', 'EliteDesk 705 G5', 'HP', '2019-10-14', 2, 1, 1),
+('Arma imagenes', 'EXP-002', 'OptiPlex 5090', 'Dell', '2020-02-28', 2, 1, 1),
+('Asombrate con tu entorno', 'EXP-003', 'ThinkCentre M920', 'Lenovo', '2018-06-05', 2, 1, 1),
+('Bañate de colores', 'EXP-004', 'EliteDesk 800 G6', 'HP', '2017-01-17', 2, 1, 1),
+('Colorea tu mente', 'EXP-005', 'OptiPlex 7080', 'Dell', '2015-11-23', 2, 1, 1),
+('Conecta tu energia', 'EXP-006', 'ThinkCentre M75s', 'Lenovo', '2024-03-10', 2, 2, 1),
+('Descubre celulas', 'EXP-007', 'EliteDesk 705 G5', 'HP', '2016-08-01', 2, 2, 1),
+('Descubre la biodiversidad', 'EXP-008', 'OptiPlex 5090', 'Dell', '2023-05-19', 2, 2, 1),
+('Descubre las obras', 'EXP-009', 'ThinkCentre M920', 'Lenovo', '2020-09-08', 2, 2, 1),
+('Deslizalo!', 'EXP-010', 'EliteDesk 800 G6', 'HP', '2022-01-14', 2, 1, 1),
+('Dispara con aire', 'EXP-011', 'OptiPlex 7080', 'Dell', '2018-12-22', 2, 1, 1),
+('Eleva la pelota', 'EXP-012', 'ThinkCentre M720', 'Lenovo', '2019-04-29', 2, 2, 1),
+('Experimentalo!', 'EXP-013', 'EliteDesk 705 G5', 'HP', '2017-07-16', 2, 2, 1),
+('Explora la celula', 'EXP-014', 'OptiPlex 5090', 'Dell', '2021-09-27', 2, 2, 1),
+('Expresa tu movimiento', 'EXP-015', 'ThinkCentre M920', 'Lenovo', '2016-04-03', 2, 2, 1),
+('Flota con burbujas', 'EXP-016', 'EliteDesk 800 G6', 'HP', '2023-11-05', 2, 1, 1),
+('Identifica la huella', 'EXP-017', 'OptiPlex 7080', 'Dell', '2019-02-14', 2, 1, 1),
+('Inspirate a lo grande', 'EXP-018', 'ThinkCentre M75s', 'Lenovo', '2015-06-21', 2, 2, 1),
+('Mira ilusiones', 'EXP-019', 'EliteDesk 705 G5', 'HP', '2020-10-09', 2, 2, 1),
+('Moldea la naturaleza', 'EXP-020', 'OptiPlex 5090', 'Dell', '2018-03-24', 2, 2, 1),
+('Produce la energia', 'EXP-021', 'ThinkCentre M920', 'Lenovo', '2022-07-15', 2, 2, 1),
+('Resuelve los retos', 'EXP-022', 'EliteDesk 800 G6', 'HP', '2017-11-01', 2, 2, 1),
+('Rueda a la meta', 'EXP-023', 'OptiPlex 7080', 'Dell', '2016-02-12', 2, 2, 1),
+('Salpicate!', 'EXP-024', 'ThinkCentre M720', 'Lenovo', '2024-08-20', 2, 2, 1),
+('Sigue la luz', 'EXP-025', 'EliteDesk 705 G5', 'HP', '2021-12-07', 2, 2, 1);
+
+select * from api_interactivo;
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Cambia tu imagen', 'EXPM-001', 'EliteDesk 800 G6', 'HP', '2020-01-10', 3, 1, 1),
+('Canaliza tu barco', 'EXPM-002', 'OptiPlex 5090', 'Dell', '2020-01-11', 3, 1, 1),
+('Cepilla la bocota', 'EXPM-003', 'ThinkCentre M920', 'Lenovo', '2020-01-12', 3, 1, 1),
+('Conoce los animales', 'EXPM-004', 'EliteDesk 705 G5', 'HP', '2020-01-13', 3, 1, 1),
+('Construye tu imaginacion', 'EXPM-005', 'OptiPlex 5070', 'Dell', '2020-01-14', 3, 1, 1),
+('Construye una casa', 'EXPM-006', 'ThinkCentre M920', 'Lenovo', '2020-01-15', 3, 1, 1),
+('Crea tu escultura', 'EXPM-007', 'EliteDesk 800 G4', 'HP', '2020-01-16', 3, 1, 1),
+('Crea una pantalla', 'EXPM-008', 'OptiPlex 5090', 'Dell', '2020-01-17', 3, 1, 1),
+('Dale servicio', 'EXPM-009', 'ThinkCentre M75s', 'Lenovo', '2020-01-18', 3, 1, 1),
+('Decora tu silueta', 'EXPM-010', 'EliteDesk 705 G5', 'HP', '2020-01-19', 3, 1, 1),
+('Descubre la naturaleza', 'EXPM-011', 'OptiPlex 5080', 'Dell', '2020-01-20', 3, 1, 1),
+('Escoge tu personaje', 'EXPM-012', 'ThinkCentre M920', 'Lenovo', '2020-01-21', 3, 1, 1),
+('Escucha el bosque', 'EXPM-013', 'EliteDesk 800 G6', 'HP', '2020-01-22', 3, 1, 1),
+('Escucha la musica', 'EXPM-014', 'OptiPlex 5090', 'Dell', '2020-01-23', 3, 1, 1),
+('Experimenta con tu mundo', 'EXPM-015', 'ThinkCentre M75q', 'Lenovo', '2020-01-24', 3, 1, 1),
+('Haz que vuelen', 'EXPM-016', 'EliteDesk 705 G4', 'HP', '2020-01-25', 3, 1, 1),
+('Juega con arena', 'EXPM-017', 'OptiPlex 5070', 'Dell', '2020-01-26', 3, 1, 1),
+('Manten el equilibrio', 'EXPM-018', 'ThinkCentre M920', 'Lenovo', '2020-01-27', 3, 1, 1),
+('Mira como nacen', 'EXPM-019', 'EliteDesk 800 G6', 'HP', '2020-01-28', 3, 1, 1),
+('Mueve la batuta', 'EXPM-020', 'OptiPlex 7080', 'Dell', '2020-01-29', 3, 1, 1),
+('Mueve tu cuerpo', 'EXPM-021', 'ThinkCentre M75s', 'Lenovo', '2020-01-30', 3, 1, 1),
+('Pesca a lo grande', 'EXPM-022', 'EliteDesk 705 G5', 'HP', '2020-01-31', 3, 1, 1),
+('Pinta de colores', 'EXPM-023', 'OptiPlex 5090', 'Dell', '2020-02-01', 3, 1, 1),
+('Rueda en Tijuana', 'EXPM-024', 'ThinkCentre M920', 'Lenovo', '2020-02-02', 3, 1, 1),
+('Tira la basura', 'EXPM-025', 'EliteDesk 800 G6', 'HP', '2020-02-03', 3, 1, 1),
+('Trepa a la cima', 'EXPM-026', 'OptiPlex 5070', 'Dell', '2020-02-04', 3, 1, 1);
+
+
+-- Inserts para sala GENERAL (sala_id = 4)
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Aprende de la naturaleza', 'GEN-001', 'ThinkCentre M90t', 'Lenovo', '2024-07-07', 4, 2, 1),
+('Arma el tiempo', 'GEN-002', 'ExpertCenter D500', 'Asus', '2023-12-04', 4, 2, 1),
+('Comparte tus experiencias', 'GEN-003', 'ThinkCentre M90t', 'Lenovo', '2023-04-03', 4, 1, 1),
+('Crea tu obra', 'GEN-004', 'OptiPlex 3080', 'Dell', '2022-11-15', 4, 2, 1),
+('Déjalo caer', 'GEN-005', 'EliteDesk 800 G6', 'HP', '2022-06-30', 4, 2, 1),
+('Desenlaza el lazo', 'GEN-006', 'ExpertCenter D500', 'Asus', '2024-05-30', 4, 2, 1),
+('Dibuja una canción', 'GEN-007', 'OptiPlex 3080', 'Dell', '2023-12-30', 4, 2, 1),
+('Diseña tu bici', 'GEN-008', 'Veriton X4680G', 'Acer', '2025-05-08', 4, 1, 1),
+('Dobla tu imaginación', 'GEN-009', 'ThinkCentre M90t', 'Lenovo', '2023-03-06', 4, 1, 1),
+('Engalana tus pasos', 'GEN-010', 'OptiPlex 3080', 'Dell', '2022-02-03', 4, 1, 1),
+('Ensambla la velocidad', 'GEN-011', 'Veriton X4680G', 'Acer', '2023-05-31', 4, 1, 1),
+('Expresa tus ideas', 'GEN-012', 'OptiPlex 5090', 'Dell', '2023-03-23', 4, 1, 1),
+('Gira las emociones', 'GEN-013', 'ThinkCentre M90t', 'Lenovo', '2024-06-22', 4, 1, 1),
+('Imagina el futuro', 'GEN-014', 'ThinkCentre M70t', 'Lenovo', '2022-05-25', 4, 2, 1),
+('Innova el juego', 'GEN-015', 'OptiPlex 5090', 'Dell', '2024-09-30', 4, 2, 1),
+('Mejora la postura', 'GEN-016', 'ThinkCentre M70t', 'Lenovo', '2025-02-21', 4, 1, 1),
+('Modela el medio ambiente', 'GEN-017', 'OptiPlex 3080', 'Dell', '2024-05-16', 4, 2, 1),
+('Nombra el invento', 'GEN-018', 'EliteDesk 800 G6', 'HP', '2023-10-19', 4, 2, 1),
+('Ponte a la moda', 'GEN-019', 'ProDesk 400 G6', 'HP', '2023-03-13', 4, 2, 1),
+('Produce una historia', 'GEN-020', 'OptiPlex 5090', 'Dell', '2023-11-17', 4, 1, 1),
+('Recicla con imaginación', 'GEN-021', 'OptiPlex 3080', 'Dell', '2023-02-03', 4, 1, 1),
+('Resuelve el enigma', 'GEN-022', 'ThinkCentre M70t', 'Lenovo', '2024-02-09', 4, 1, 1),
+('Reta tu genialidad', 'GEN-023', 'ExpertCenter D500', 'Asus', '2022-10-10', 4, 1, 1),
+('Reverdece la ciudad', 'GEN-024', 'ProDesk 400 G6', 'HP', '2023-04-08', 4, 1, 1);
+
+-- Inserts para sala EDUCA (sala_id = 5)
+
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Arenas Movedizas', 'EDU-001', 'Veriton X4680G', 'Acer', '2025-04-29', 5, 2, 1),
+('Auditorio', 'EDU-002', 'EliteDesk 800 G6', 'HP', '2022-07-05', 5, 2, 1),
+('Caida libre', 'EDU-003', 'ExpertCenter D500', 'Asus', '2024-02-21', 5, 2, 1),
+('Capacidad pulmonar', 'EDU-004', 'ProDesk 400 G6', 'HP', '2023-07-03', 5, 1, 1),
+('Conoce tu familia', 'EDU-005', 'ThinkCentre M70t', 'Lenovo', '2025-03-23', 5, 2, 1),
+('Crear pegamento', 'EDU-006', 'ProDesk 400 G6', 'HP', '2023-11-30', 5, 1, 1),
+('Desde lo alto', 'EDU-007', 'ThinkCentre M90t', 'Lenovo', '2022-05-21', 5, 1, 1),
+('Fuego sin cerillos', 'EDU-008', 'EliteDesk 800 G6', 'HP', '2022-06-15', 5, 2, 1),
+('Momia magica', 'EDU-009', 'ProDesk 400 G6', 'HP', '2022-09-11', 5, 1, 1),
+('Multimedia', 'EDU-010', 'Veriton X4680G', 'Acer', '2023-11-05', 5, 1, 1),
+('Multimedia PC01', 'EDU-011', 'OptiPlex 3080', 'Dell', '2025-03-07', 5, 1, 1),
+('Multimedia PC02', 'EDU-012', 'ThinkCentre M70t', 'Lenovo', '2024-09-22', 5, 2, 1),
+('Multimedia PC03', 'EDU-013', 'Veriton X4680G', 'Acer', '2023-05-03', 5, 2, 1),
+('Multimedia PC04', 'EDU-014', 'ProDesk 400 G6', 'HP', '2022-01-17', 5, 2, 1),
+('Multimedia PC05', 'EDU-015', 'Veriton X4680G', 'Acer', '2025-05-21', 5, 2, 1),
+('Multimedia PC06', 'EDU-016', 'ProDesk 400 G6', 'HP', '2023-12-08', 5, 2, 1),
+('Multimedia PC07', 'EDU-017', 'ThinkCentre M70t', 'Lenovo', '2024-10-15', 5, 2, 1),
+('Multimedia PC08', 'EDU-018', 'Veriton X4680G', 'Acer', '2022-08-25', 5, 2, 1),
+('Multimedia PC09', 'EDU-019', 'ThinkCentre M70t', 'Lenovo', '2024-08-12', 5, 1, 1),
+('Multimedia PC10', 'EDU-020', 'EliteDesk 800 G6', 'HP', '2024-11-10', 5, 2, 1),
+('Multimedia Proyeccion', 'EDU-021', 'OptiPlex 3080', 'Dell', '2024-05-08', 5, 2, 1),
+('Sala de Lectura', 'EDU-022', 'Veriton X4680G', 'Acer', '2022-03-20', 5, 1, 1),
+('Taller de Puentes', 'EDU-023', 'ProDesk 400 G6', 'HP', '2023-07-22', 5, 1, 1),
+('Taller de Queso', 'EDU-024', 'EliteDesk 800 G6', 'HP', '2022-04-14', 5, 2, 1),
+('Taller de Sonidos', 'EDU-025', 'OptiPlex 3080', 'Dell', '2023-10-11', 5, 2, 1),
+('Taller de Meteoritos', 'EDU-026', 'ExpertCenter D500', 'Asus', '2024-08-30', 5, 2, 1);
+
+INSERT INTO api_interactivo (nombre, numero_serie, modelo_computadora, marca_computadora, fecha_instalado, sala_id, tipo_id, status_id) VALUES
+('Adereza tu platillo', 'VAL-001', 'EliteDesk 800 G6', 'HP', '2019-03-12', 6, 2, 1),
+('Aprecia el exito', 'VAL-002', 'OptiPlex 7080', 'Dell', '2022-07-08', 6, 1, 1),
+('Arma tu estado', 'VAL-003', 'ThinkCentre M720', 'Lenovo', '2015-11-29', 6, 1, 1),
+('Atrapa tus sueños', 'VAL-004', 'ProDesk 600 G4', 'HP', '2018-01-21', 6, 2, 1),
+('Baila a tu ritmo', 'VAL-005', 'OptiPlex 5090', 'Dell', '2020-09-14', 6, 2, 1),
+('Conoce el pasado', 'VAL-006', 'ThinkCentre M75s', 'Lenovo', '2024-03-05', 6, 2, 1),
+('Construye tu ciudad', 'VAL-007', 'EliteDesk 705 G5', 'HP', '2023-02-18', 6, 1, 1),
+('Crea tu rola', 'VAL-008', 'Vostro 3681', 'Dell', '2016-12-10', 6, 2, 1),
+('Cuenta tu historia', 'VAL-009', 'ThinkCentre M920', 'Lenovo', '2021-06-26', 6, 1, 1),
+('Curiosea el arte', 'VAL-010', 'EliteDesk 800 G6', 'HP', '2017-10-03', 6, 2, 1),
+('Delinea tus origenes', 'VAL-011', 'OptiPlex 7080', 'Dell', '2020-02-12', 6, 1, 1),
+('Descifra el personaje', 'VAL-012', 'ThinkCentre M720', 'Lenovo', '2025-05-01', 6, 1, 1),
+('Descubre tus rincones', 'VAL-013', 'ProDesk 600 G4', 'HP', '2016-06-19', 6, 2, 1),
+('Diseña tu imagen', 'VAL-014', 'OptiPlex 5090', 'Dell', '2023-08-09', 6, 2, 1),
+('Disfruta el matorral', 'VAL-015', 'ThinkCentre M75s', 'Lenovo', '2022-01-30', 6, 1, 1),
+('Estampa los emblemas', 'VAL-016', 'EliteDesk 705 G5', 'HP', '2018-11-14', 6, 2, 1);
+
+INSERT INTO api_tipomantenimiento (nombre, descripcion) VALUES
+('Preventivo', 'Mantenimiento planificado para evitar fallas'),
+('Correctivo', 'Reparación tras falla detectada');
+
+-- Inserts para tabla: dep_area esto sigue del proyecto
+INSERT INTO api_deparea (nombre, descripcion) VALUES
+('Mantenimiento', 'Departamento responsable de los mantenimientos tecnicos'),
+('Sistemas', 'Departamento encargado de equipos informáticos');
+
+select * from api_interactivo;
+
+
+INSERT INTO api_statusmantenimiento (nombre) VALUES
+('Pendiente'),
+('En proceso'),
+('Completado');
+
+INSERT INTO api_nivelprioridad (nombre, descripcion, nivel) VALUES
+('Urgente', 'Atención inmediata por riesgo crítico', 1),
+('Alta', 'Requiere atención inmediata', 2),
+('Media', 'Importancia moderada', 3),
+('Baja', 'Puede esperar', 4);
+
+INSERT INTO api_usuario (nombre_usuario, correo, contrasena_hash, rol, fecha_creacion) VALUES
+('sistemas1', 'tecnico1@trompo.com', 'hashed_password_456', 'Sistemas', '2025-07-10'),
+('mantenimiento1', 'mantenimiento1@trompo.com', 'hashed_password_456', 'Sistemas', '2025-07-10'),
+('guia1', 'guia1@trompo.com', 'hashed_password_789', 'Guia', '2025-07-10');
+
+
+INSERT INTO api_perfil (usuario_id, nombre_completo, telefono, foto_url, direccion, fecha_nacimiento, genero) VALUES
+(1, 'María Pérez', '6641234567', NULL, 'Av. Revolución #123', '1990-05-12', 'Femenino'),
+(2, 'Juan López', '6642345678', NULL, 'Calle Segunda #456', '1985-11-03', 'Masculino'),
+(3, 'Ana Torres', '6643456789', NULL, 'Col. Libertad', '1992-07-21', 'Femenino');
+
+INSERT INTO api_proyector (nombre, numero_serie, modelo, marca, fecha_instalado, sala_id, status_id) VALUES
+('Diviértete con tu Sombra', 'X8AD3400292', 'EMP-83', 'Epson', '2023-01-01', 1, 1),
+('Haz música', 'PDS2P0140800', 'NP-ME401W', 'NEC', '2023-01-02', 1, 1),
+('Modifica el reliebe', 'PDS2P01304800', 'MW826STH', 'BENQ', '2023-01-03', 1, 1),
+('Simulador CFE', 'SN-NP4100-01', 'NP4100', 'NEC', '2023-01-04', 1, 1),
+('Descubre tus Rincones', 'SN-PA500U-01', 'PA500U', 'NEC', '2023-01-05', 1, 1),
+('Equipo de Proyección Auditorio', 'MH534-EDU002', 'MH534', 'BENQ', '2023-01-06', 6, 1),
+('Equipo de Proyección Multimedia', 'PTF300NT-EDU003', 'PT-F300NT', 'Panasonic', '2023-01-07', 6, 1),
+('Crea tu Pantalla', 'BMYB43903058', 'IN112A', 'INFOCUS', '2023-01-08', 3, 1),
+('Crea tu Rola', 'T6AF340009L', 'PowerLite Pro G6150', 'Epson', '2023-01-09', 2, 1),
+('Baila a tu Ritmo', 'X8AD3400119', 'UM330X', 'Epson', '2023-01-10', 2, 1),
+('Construye tu Ciudad', 'PDL9N00183031', 'WXGA', 'Benq', '2023-01-11', 2, 1),
+('Arma tu estado', 'CPT23400039', 'QL10', 'INFOCUS', '2023-01-12', 2, 1),
+('Sala Proyección I', 'ELPLM08-SP1', 'EB-L530U', 'EPSON', '2023-01-13', 7, 1),
+('Sala Proyección II', 'ELPLM08-SP2', 'EB-L530U', 'EPSON', '2023-01-14', 7, 1),
+('Sala de Proyeccion III', 'X4JL8800372', 'EB-L530U', 'EPSON', '2023-01-15', 7, 1),
+('Sala usos múltiples', 'MH534-SUM', 'MH534', 'BENQ', '2023-01-16', 8, 1),
+('Siente el agua', '4800041ED', 'NP-VE281', 'NEC', '2023-01-18', 4, 1);
+
+select * from api_proyector;
+
+INSERT INTO api_reportefalla (interactivo_id, descripcion, foto, fecha_reporte, estado_id, prioridad_id) VALUES
+(1, 'Pantalla no responde al tacto.', 'falla1.jpg', '2025-07-01', 1, 1),
+(2, 'No enciende el proyector.', 'falla2.jpg', '2025-07-03', 2, 2),
+(3, 'Audio distorsionado en el interactivo.', 'falla3.jpg', '2025-07-05', 1, 3);
+
+
+INSERT INTO api_tareamantenimiento (interactivo_id, reporte_id, area_id, tipo_id, titulo, descripcion, fecha_programada, fecha_realizada, estado_id) VALUES
+(1, 1, 1, 1, 'Revisión de pantalla táctil', 'Verificar y calibrar pantalla táctil del interactivo', '2025-07-02', NULL, '2'),
+(2, 2, 1, 2, 'Cambio de lámpara', 'Reemplazo de lámpara del proyector por desgaste', '2025-07-04', '2025-07-04', '3'),
+(3, 3, 2, 1, 'Inspección de audio', 'Revisión del sistema de audio y ajuste del cableado', '2025-07-06', NULL, '1');
+
+
+INSERT INTO api_reportemantenimiento (interactivo_id, tarea_id, observaciones, fecha, estado_id) VALUES
+(1, 1, 'Pantalla calibrada con éxito, se recomienda revisión mensual.', '2025-07-03', 2),
+(2, 2, 'Lámpara reemplazada, se restauró la imagen sin problemas.', '2025-07-04', 3),
+(3, 3, 'Se detectó un falso contacto, pendiente revisión de cable.', '2025-07-07', 1);
+
+
+INSERT INTO api_estadotarea (tarea_id, estado_anterior, estado_nuevo, fecha_cambio, status_id) VALUES
+(1, 'Pendiente', 'En proceso', '2025-07-02', 1),
+(1, 'En proceso', 'Completado', '2025-07-03', 2),
+(2, 'Pendiente', 'Completado', '2025-07-04', 3),
+(3, 'Pendiente', 'En proceso', '2025-07-06', 1);
+
+
+INSERT INTO api_calendarizacion (
+    titulo, descripcion, fecha_inicio, fecha_fin, interactivo_id, tarea_id, creado_por_id, creado_el
+) VALUES (
+    'Mantenimiento interactivo Sala interactivo',
+    'Revisión y calibración del hardware y software del interactivo.',
+    '2025-07-15 10:00:00',
+    '2025-07-15 12:00:00',
+    1,  -- interactivo_id
+    1,  -- tarea_id
+    1,  -- creado_por_id
+    NOW()  -- creado_el con fecha actual del servidor
+);
+
+select* from api_calendarizacion;

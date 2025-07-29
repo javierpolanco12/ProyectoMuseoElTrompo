@@ -1,0 +1,91 @@
+/* Estilos adicionales para el CRUD de usuarios */
+
+.avatar-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.table-responsive {
+  min-height: 300px;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  max-width: 350px;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-success {
+  background-color: #d4edda;
+  border-left: 4px solid #28a745;
+  color: #155724;
+}
+
+.notification-error {
+  background-color: #f8d7da;
+  border-left: 4px solid #dc3545;
+  color: #721c24;
+}
+
+.notification-close-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.notification-close-btn:hover {
+  opacity: 1;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.header-gradient {
+  background: linear-gradient(135deg, #4a6bff 0%, #2541b2 100%);
+  border-radius: 10px;
+}
+
+.form-control-custom:focus {
+  border-color: #4a6bff;
+  box-shadow: 0 0 0 0.25rem rgba(74, 107, 255, 0.25);
+}
+
+.progress-custom {
+  height: 8px;
+  border-radius: 4px;
+}
+
+.registration-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.submit-btn {
+  padding: 0.5rem 1.5rem;
+}
+
+.badge-custom {
+  font-weight: 500;
+}
